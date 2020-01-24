@@ -36,9 +36,9 @@ imageLinks.forEach(imageLink => {
             case './static/player.png':
                 images.playerImg = img;
                 break;
-/*             case './static/playerDeath.png':
+            case './static/playerDeath.png':
                 images.playerDeath = img; 
-                break; */
+                break;
         }
         graphics.push(img);
         if(graphics.length === 8) {
@@ -58,13 +58,16 @@ function drawGame() {
         for (let i = 0; i < state.map.length; i++) {
             for (let j = 0; j < state.map[i].length; j++) {
                 // Draw blocks
-                console.log("block" + state.map[i][j].health);
                 ctx.drawImage(images["block" + state.map[i][j].health], i*32, j*32, 32, 32);
             }
         }
         // Draw players
         state.playersArray.forEach(player => {
-            ctx.drawImage(images.playerImg, player.position.x*32, player.position.y*32, 32, 32);
+            if (!player.death) {
+                ctx.drawImage(images.playerImg, player.position.x*32, player.position.y*32, 32, 32);
+            } else {
+                ctx.drawImage(images.playerDeath, player.position.x*32, player.position.y*32, 32, 32);
+            }
         })
         //console.log(state);
     }) // Return State
