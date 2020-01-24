@@ -5,7 +5,7 @@
 
 let socket = io();
 
-const imageLinks = ['./static/block0.png','./static/block1.png','./static/block2.png','./static/block3.png','./static/block4.png','./static/block5.png','./static/player.png','./static/playerDeath.png'];
+const imageLinks = ['./static/block0.svg','./static/block1.svg','./static/block2.svg','./static/block3.svg','./static/block4.svg','./static/block5.svg','./static/player.png','./static/playerDeath.png'];
 let graphics = [];
 let playerImg, block0, block1, block2, block3, block4, block5, playerDeath;
 let images = {playerImg, block0, block1, block2, block3, block4, block5, playerDeath};
@@ -15,22 +15,22 @@ imageLinks.forEach(imageLink => {
     img.src = imageLink;
     img.onload = () => {
         switch (imageLink) {
-            case './static/block0.png':
+            case './static/block0.svg':
                 images.block0 = img;
                 break;
-            case './static/block1.png':
+            case './static/block1.svg':
                 images.block1 = img;
                 break;
-            case './static/block2.png':
+            case './static/block2.svg':
                 images.block2 = img;
                 break;
-            case './static/block3.png':
+            case './static/block3.svg':
                 images.block3 = img;
                 break;
-            case './static/block4.png':
+            case './static/block4.svg':
                 images.block4 = img;
                 break;
-            case './static/block5.png':
+            case './static/block5.svg':
                 images.block5 = img;
                 break;
             case './static/player.png':
@@ -58,15 +58,15 @@ function drawGame() {
         for (let i = 0; i < state.map.length; i++) {
             for (let j = 0; j < state.map[i].length; j++) {
                 // Draw blocks
-                ctx.drawImage(images["block" + state.map[i][j].health], i*32, j*32, 32, 32);
+                ctx.drawImage(images["block" + state.map[i][j].health], i*64, j*64, 64, 64);
             }
         }
         // Draw players
         state.playersArray.forEach(player => {
             if (!player.death) {
-                ctx.drawImage(images.playerImg, player.position.x*32, player.position.y*32, 32, 32);
+                ctx.drawImage(images.playerImg, player.position.x*64, player.position.y*64, 64, 64);
             } else {
-                ctx.drawImage(images.playerDeath, player.position.x*32, player.position.y*32, 32, 32);
+                ctx.drawImage(images.playerDeath, player.position.x*64, player.position.y*64, 64, 64);
             }
         })
         //console.log(state);
