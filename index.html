@@ -6,14 +6,14 @@
 let socket = io();
 
 const imageLinks = ['./static/block0.svg','./static/block1.svg','./static/block2.svg','./static/block3.svg','./static/block4.svg','./static/block5.svg','./static/player.png','./static/playerDeath.png'];
-let graphics = [];
-let playerImg, block0, block1, block2, block3, block4, block5, playerDeath;
-let images = {playerImg, block0, block1, block2, block3, block4, block5, playerDeath};
+let counter = 0
+let images = {playerImg: {}, block0: {}, block1: {}, block2: {}, block3: {}, block4: {}, block5: {}, playerDeath: {}};
 
 imageLinks.forEach(imageLink => {
     let img = new Image();
     img.src = imageLink;
     img.onload = () => {
+        counter++;
         switch (imageLink) {
             case './static/block0.svg':
                 images.block0 = img;
@@ -40,8 +40,7 @@ imageLinks.forEach(imageLink => {
                 images.playerDeath = img; 
                 break;
         }
-        graphics.push(img);
-        if(graphics.length === 8) {
+        if(counter === imageLinks.length) {
             drawGame();
         }
     }
@@ -69,13 +68,11 @@ function drawGame() {
                 ctx.drawImage(images.playerDeath, player.position.x*64, player.position.y*64, 64, 64);
             }
         })
-        //console.log(state);
     }) // Return State
 }
 
 
 document.addEventListener('keydown',(ev) => {
-    //console.log(ev.key)
     switch(ev.key){
         case 'ArrowRight':
             socket.emit('move','right')
