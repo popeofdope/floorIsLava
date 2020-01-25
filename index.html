@@ -61,13 +61,14 @@ function drawGame() {
             }
         }
         // Draw players
-        state.playersArray.forEach(player => {
+        for (let i = 0; i < state.playersArray.length; i++) {
+            const player = state.playersArray[i];
             if (!player.death) {
                 ctx.drawImage(images.playerImg, player.position.x*64, player.position.y*64, 64, 64);
             } else {
                 ctx.drawImage(images.playerDeath, player.position.x*64, player.position.y*64, 64, 64);
             }
-        })
+        }
     }) // Return State
 }
 
