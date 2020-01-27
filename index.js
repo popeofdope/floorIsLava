@@ -8,17 +8,20 @@ const newG = require('./globby').newIOServer;
 app.use('/static', express.static('public'))
 
 let squareHealth = 5;
+let breakTimer = 1;
+let rows =5;
+let columns = 5;
+
+let map = [];
+
+for(let r = 0; r<rows+1;r++){
+  map.push([])
+  for(let c = 0; c<columns+1;c++){
+    map[r].push({health:squareHealth})
+  }
+}
 newG({
-    map:[[{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
-         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}]],
+    map:map,
     playersArray:[
       {player:'player1', position:{x:0,y:0},death:false},
       {player:'player2', position:{x:5,y:5},death:false},
@@ -26,7 +29,7 @@ newG({
       {player:'player4', position:{x:3,y:3},death:false},
       {player:'player5', position:{x:9,y:9},death:false}, */
     ],
-    breakTimer:5
+    breakTimer:breakTimer
 },
 function(player,move,state){
   let pl = state.playersArray.find((pl) => {
@@ -53,7 +56,7 @@ function(player,move,state){
     case 'right': 
 
 
-      if(pl.position.x < 9){
+      if(pl.position.x < columns){
         let freePosCheck = true;
         state.playersArray.forEach((innerPl) => {
           if(innerPl.position.x == pl.position.x+1 && innerPl.position.y == pl.position.y){
@@ -68,7 +71,7 @@ function(player,move,state){
     case 'down': 
 
 
-      if(pl.position.y < 9){
+      if(pl.position.y < rows){
         let freePosCheck = true;
         state.playersArray.forEach((innerPl) => {
           if(innerPl.position.y == pl.position.y+1 && innerPl.position.x == pl.position.x){
@@ -111,7 +114,7 @@ function(state){
       }
     })
     if(state.breakTimer < 0) {
-      state.breakTimer = 5;
+      state.breakTimer = breakTimer;
       const row = state.map[Math.floor(Math.random()*state.map.length)];
       const col = row[Math.floor(Math.random()*row.length)]
       if(col.health > 0){
