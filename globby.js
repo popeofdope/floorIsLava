@@ -65,7 +65,7 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 })
 
                 if(state.players.length < maxPlayers){
-                    return {message:"Not Enough Players to start"}
+                    return {message:"Not Enough Players to start",required:maxPlayers,current:state.players.length}
                 }
 
                 moveFunction(player, move,state)
@@ -74,7 +74,7 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
 
             this.timeFunction = () => {
                 if(state.players.length < maxPlayers){
-                    return {message:"Not Enough Players to start"}
+                    return {message:"Not Enough Players to start",required:maxPlayers,current:state.players.length}
                 }
                 if(timeFunction != undefined){
                     timeFunction(state)
