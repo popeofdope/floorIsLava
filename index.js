@@ -8,6 +8,7 @@ const newG = require('./globby').newIOServer;
 app.use('/static', express.static('public'))
 
 let squareHealth = 5;
+let breakTimer = 5;
 newG({
     map:[[{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
          [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
@@ -26,7 +27,7 @@ newG({
       {player:'player4', position:{x:3,y:3},death:false},
       {player:'player5', position:{x:9,y:9},death:false}, */
     ],
-    breakTimer:5
+    breakTimer:breakTimer
 },
 function(player,move,state){
   let pl = state.playersArray.find((pl) => {
@@ -111,7 +112,7 @@ function(state){
       }
     })
     if(state.breakTimer < 0) {
-      state.breakTimer = 5;
+      state.breakTimer = breakTimer;
       const row = state.map[Math.floor(Math.random()*state.map.length)];
       const col = row[Math.floor(Math.random()*row.length)]
       if(col.health > 0){
