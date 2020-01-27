@@ -100,7 +100,11 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 }
             }
             this.disconnect = (playerId) => {
-                
+                let pl =this.players.find((pl) => {
+                    return pl.id == playerId;
+                })
+
+                this.players.splice(this.players.indexOf(pl),1);
             }
         }
   
