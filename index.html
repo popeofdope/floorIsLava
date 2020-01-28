@@ -47,14 +47,17 @@ imageLinks.forEach(imageLink => {
 });
 
 function drawGame() {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext('2d');
     socket.on('returnState', (state) => {
+        //Draw the game
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (!state.map) {
-            console.log(state)
+            ctx.font = "30px Arial";
+            ctx.fillText(state.current+"/"+state.required+" players", canvas.width/2.8, canvas.height/4);
+            ctx.fillText(state.message, canvas.width/5, canvas.height/3);
             return
         }
-        //Draw the game
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext('2d');
         for (let i = 0; i < state.map.length; i++) {
             for (let j = 0; j < state.map[i].length; j++) {
                 // Draw blocks
@@ -102,7 +105,7 @@ document.addEventListener('keydown',(ev) => {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <body>
-        <canvas id="canvas" width="640" height="640"></canvas>
+        <canvas id="canvas" style="border: 1px solid black" width="640" height="640"></canvas>
     </body>
 </head>
 <body>
