@@ -105,6 +105,7 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 })
 
                 this.players.splice(this.players.indexOf(pl),1);
+                console.log(this.players)
             }
         }
   
@@ -131,6 +132,11 @@ module.exports.newIOServer = function newServer(baseState,moveFunction,maxPlayer
                 helperFunctionDelay();
             },100)
         }
+
+        socket.on('disconnect', () => {
+            game.disconnect(socket.id)
+        })
+
         helperFunctionDelay();
         lobby.joinGame(socket.id)
         

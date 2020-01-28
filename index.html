@@ -49,6 +49,7 @@ imageLinks.forEach(imageLink => {
 function drawGame() {
     socket.on('returnState', (state) => {
         if (!state.map) {
+            console.log(state)
             return
         }
         //Draw the game
