@@ -64,18 +64,22 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                     return pl.id == playerId
                 })
 
-                if(state.players.length < maxPlayers){
+                if(state.players.length < maxPlayers && state.started === false){
                     return {message:"Not Enough Players to start",required:maxPlayers,current:state.players.length}
                 }
+
+                state.started = true;
 
                 moveFunction(player, move,state)
                 return this.returnState();
             }
 
             this.timeFunction = () => {
-                if(state.players.length < maxPlayers){
+                if(state.players.length < maxPlayers  && state.started === false){
                     return {message:"Not Enough Players to start",required:maxPlayers,current:state.players.length}
                 }
+
+                state.started = true;
                 if(timeFunction != undefined){
                     timeFunction(state)
                 }
@@ -100,11 +104,14 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 }
             }
             this.disconnect = (playerId) => {
-                let pl =this.players.find((pl) => {
-                    return pl.id == playerId;
-                })
+                if(!state.started){
+                    let pl =this.players.find((pl) => {
+                        return pl.id == playerId;
+                    })
+    
+                    this.players.splice(this.players.indexOf(pl),1);
+                }
 
-                this.players.splice(this.players.indexOf(pl),1);
             }
         }
   

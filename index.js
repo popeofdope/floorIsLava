@@ -8,7 +8,7 @@ const newG = require('./globby').newIOServer;
 app.use('/static', express.static('public'))
 
 let squareHealth = 5;
-let breakTimer = 1;
+let breakTimer = 12;
 let rows =5;
 let columns = 5;
 
@@ -20,18 +20,8 @@ for(let r = 0; r<rows+1;r++){
     map[r].push({health:squareHealth})
   }
 }
-newG({
-    map:map,
-    playersArray:[
-      {player:'player1', position:{x:0,y:0},death:false},
-      {player:'player2', position:{x:5,y:5},death:false},
-      /* {player:'player3', position:{x:7,y:7},death:false},
-      {player:'player4', position:{x:3,y:3},death:false},
-      {player:'player5', position:{x:9,y:9},death:false}, */
-    ],
-    breakTimer:breakTimer
-},
-function(player,move,state){
+
+let moveIt = function(player,move,state){
   let pl = state.playersArray.find((pl) => {
     return pl.player == player.ref;
   });
@@ -97,7 +87,23 @@ function(player,move,state){
         }
         break;
 }
+}
 
+newG({
+    map:map,
+    playersArray:[
+      {player:'player1', position:{x:0,y:0},death:false},
+      {player:'player2', position:{x:5,y:5},death:false},
+      /* {player:'player3', position:{x:7,y:7},death:false},
+      {player:'player4', position:{x:3,y:3},death:false},
+      {player:'player5', position:{x:9,y:9},death:false}, */
+    ],
+    breakTimer:breakTimer,
+    started:false
+},
+function(player,move,state){
+
+    moveIt(player,move,state)
 
     //State Change on Move
 },
