@@ -105,7 +105,6 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 })
 
                 this.players.splice(this.players.indexOf(pl),1);
-                console.log(this.players)
             }
         }
   
@@ -134,7 +133,19 @@ module.exports.newIOServer = function newServer(baseState,moveFunction,maxPlayer
         }
 
         socket.on('disconnect', () => {
-            
+            let game  = lobby.games.find((game) =>{
+                let isThisIt = false;
+
+                game.players.forEach((player) => {
+                    if(player.id === socket.id){
+                        isThisIt = true;
+                    }
+                })
+
+                return isThisIt;
+            })
+
+            game.disconnect(socket.id)
         })
 
         helperFunctionDelay();
