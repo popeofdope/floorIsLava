@@ -134,7 +134,7 @@ module.exports.newIOServer = function newServer(baseState,moveFunction,maxPlayer
         }
 
         socket.on('disconnect', () => {
-            game.disconnect(socket.id)
+            
         })
 
         helperFunctionDelay();
