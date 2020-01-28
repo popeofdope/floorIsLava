@@ -22,71 +22,64 @@ for(let r = 0; r<rows+1;r++){
 }
 
 let moveIt = function(player,move,state){
-  let pl = state.playersArray.find((pl) => {
-    return pl.player == player.ref;
-  });
-  let playersArray = state.playersArray
+  let pl
+  
+  if(player.ref){
+    pl = state.playersArray.find((pl) => {
+      return pl.player == player.ref;
+    });
+  }
+  else{
+    pl = player;
+  }
+
   if (pl.death) {
     return
   }
+
   switch(move){
-    case 'left': 
-      if(pl.position.x > 0){
-        let freePosCheck = true;
-        playersArray.forEach((innerPl) => {
-          if(innerPl.position.x == pl.position.x-1 && innerPl.position.y == pl.position.y){
-            freePosCheck = false;
-          }
-        })
-        if(freePosCheck){
-          pl.position.x -=1;
+      case 'left': 
+        if(pl.position.x > 0){
+            pl.position.x -=1;
         }
-      }
-      break;
-    case 'right': 
-
-
-      if(pl.position.x < columns){
-        let freePosCheck = true;
-        state.playersArray.forEach((innerPl) => {
-          if(innerPl.position.x == pl.position.x+1 && innerPl.position.y == pl.position.y){
-            freePosCheck = false;
-          }
-        })
-        if(freePosCheck){
-          pl.position.x +=1;
+        else{
+          pl.position.x = columns
         }
-      }
       break;
-    case 'down': 
 
-
-      if(pl.position.y < rows){
-        let freePosCheck = true;
-        state.playersArray.forEach((innerPl) => {
-          if(innerPl.position.y == pl.position.y+1 && innerPl.position.x == pl.position.x){
-            freePosCheck = false;
-          }
-        })
-        if(freePosCheck){
+      case 'right': 
+        if(pl.position.x < columns){
+            pl.position.x +=1;
+        }
+        else{
+          pl.position.x = 0
+        }
+      break;
+      case 'down': 
+        if(pl.position.y < rows){
           pl.position.y +=1;
-        } 
-      }
+        }
+        else{
+          pl.position.y = 0
+        }
       break;
+
       case 'up': 
         if(pl.position.y > 0){
-          let freePosCheck = true;
-          state.playersArray.forEach((innerPl) => {
-            if(innerPl.position.y == pl.position.y-1 && innerPl.position.x == pl.position.x){
-              freePosCheck = false;
-            }
-          })
-          if(freePosCheck){
-            pl.position.y -=1;
-          }
+          pl.position.y -=1;
         }
-        break;
-}
+        else{
+          pl.position.y = rows
+        }
+      break;
+  }
+
+  let plSitting  = state.playersArray.find((innerPl) => {
+      return innerPl.position.x == pl.position.x && innerPl.position.y == pl.position.y &&  innerPl != pl
+  })
+  if(plSitting){
+    moveIt(plSitting,move,state)
+  }
 }
 
 newG({
