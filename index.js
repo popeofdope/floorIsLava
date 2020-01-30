@@ -11,7 +11,7 @@ let squareHealth = 5;
 let breakTimer = 5000;
 let rows =2;
 let columns = 3;
-let maxPlayers = 1;
+let maxPlayers = 2;
 
 let map = [];
 
