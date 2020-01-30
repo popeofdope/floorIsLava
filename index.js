@@ -8,16 +8,18 @@ const newG = require('./globby').newIOServer;
 app.use('/static', express.static('public'))
 
 let squareHealth = 5;
-let breakTimer = 12;
-let rows =5;
-let columns = 5;
+let breakTimer = 5000;
+let rows =2;
+let columns = 3;
+let maxPlayers = 1;
 
 let map = [];
 
-for(let r = 0; r<rows+1;r++){
+
+for(let c = 0; c<columns;c++){
   map.push([])
-  for(let c = 0; c<columns+1;c++){
-    map[r].push({health:squareHealth})
+  for(let r = 0; r<rows;r++){
+    map[c].push({health:squareHealth})
   }
 }
 
@@ -43,12 +45,12 @@ let moveIt = function(player,move,state){
             pl.position.x -=1;
         }
         else{
-          pl.position.x = columns
+          pl.position.x = columns-1
         }
       break;
 
       case 'right': 
-        if(pl.position.x < columns){
+        if(pl.position.x < columns-1){
             pl.position.x +=1;
         }
         else{
@@ -56,7 +58,7 @@ let moveIt = function(player,move,state){
         }
       break;
       case 'down': 
-        if(pl.position.y < rows){
+        if(pl.position.y < rows-1){
           pl.position.y +=1;
         }
         else{
@@ -69,7 +71,7 @@ let moveIt = function(player,move,state){
           pl.position.y -=1;
         }
         else{
-          pl.position.y = rows
+          pl.position.y = rows-1
         }
       break;
   }
@@ -85,8 +87,8 @@ let moveIt = function(player,move,state){
 newG({
     map:map,
     playersArray:[
-      {player:'player1', position:{x:0,y:0},death:false},
-      {player:'player2', position:{x:5,y:5},death:false},
+      {player:'player1', position:{x:0,y:0},death:false,color:'red'},
+      {player:'player2', position:{x:5,y:5},death:false, color:'blue'},
       /* {player:'player3', position:{x:7,y:7},death:false},
       {player:'player4', position:{x:3,y:3},death:false},
       {player:'player5', position:{x:9,y:9},death:false}, */
@@ -100,7 +102,7 @@ function(player,move,state){
 
     //State Change on Move
 },
-2, // Number Of Players
+maxPlayers, // Number Of Players
 function(state){
     //State Change on Time
     state.playersArray.forEach((pl) => {
@@ -139,6 +141,6 @@ app.get('/', function(req, res){
 
 
 
-http.listen(3000, function(){
+http.listen(3333, function(){
   console.log('listening on *:3000');
 });
