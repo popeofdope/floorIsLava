@@ -16,7 +16,9 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
   
             if(!ga){
                 ga = this.games.find((g) => {
-                    return g.players.length < g.maxPlayers;
+                    let st =  g.returnState();
+                    
+                    return g.players.length < g.maxPlayers && !st.started
                 })
                 if(ga){
                     ga.join(playerId);
@@ -104,14 +106,10 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 }
             }
             this.disconnect = (playerId) => {
-                if(!state.started){
                     let pl =this.players.find((pl) => {
                         return pl.id == playerId;
                     })
-    
                     this.players.splice(this.players.indexOf(pl),1);
-                }
-
             }
         }
   
@@ -131,10 +129,18 @@ module.exports.newIOServer = function newServer(baseState,moveFunction,maxPlayer
             setTimeout(()=>{
 
                 lobby.games.forEach((game) => {
-                    game.players.forEach((player) => {
-                        io.to(player.id).emit('returnState',game.timeFunction())
-                    })
+                    if(!game.players.length){
+                        lobby.games.splice(lobby.games.indexOf(game),1)
+                    }
+                    else{
+                        game.players.forEach((player) => {
+                            io.to(player.id).emit('returnState',game.timeFunction())
+                        })
+                    }
+
                 })
+
+                console.log(lobby.games.length)
                 helperFunctionDelay();
             },100)
         }

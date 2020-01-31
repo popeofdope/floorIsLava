@@ -8,9 +8,9 @@ const newG = require('./globby').newIOServer;
 app.use('/static', express.static('public'))
 
 let squareHealth = 5;
-let breakTimer = 5000;
-let rows =2;
-let columns = 3;
+let breakTimer = 10;
+let rows =10;
+let columns = 10;
 let maxPlayers = 2;
 
 let map = [];

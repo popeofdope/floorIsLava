@@ -89,7 +89,14 @@ function drawGame() {
         for (let i = 0; i < state.playersArray.length; i++) {
             const player = state.playersArray[i];
             if (!player.death) {
+                if(player.color == 'blue'){
+                    ctx.filter = 'invert(100%)'
+                }
+
                 ctx.drawImage(images.playerImg, player.position.x*responsiveX, player.position.y*responsiveY, responsiveX, responsiveY);
+                if(player.color == 'blue'){
+                    ctx.filter = 'invert(0%)';
+                }
             } else {
                 ctx.drawImage(images.playerDeath, player.position.x*responsiveX, player.position.y*responsiveY, responsiveX, responsiveY);
             }
