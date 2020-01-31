@@ -9,6 +9,17 @@ const imageLinks = ['./static/block0.svg','./static/block1.svg','./static/block2
 let counter = 0
 let images = {playerImg: {}, block0: {}, block1: {}, block2: {}, block3: {}, block4: {}, block5: {}, playerDeath: {}};
 
+// Canvas resizing
+(function() {
+  window.onresize = displayWindowSize;
+  window.onload = displayWindowSize;
+
+  function displayWindowSize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+})();
+
 imageLinks.forEach(imageLink => {
     let img = new Image();
     img.src = imageLink;
@@ -49,6 +60,8 @@ imageLinks.forEach(imageLink => {
 function drawGame() {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext('2d');
+    let start = false;
+    let responsiveX, responsiveY, mapWidth, mapHeight
     socket.on('returnState', (state) => {
         //Draw the game
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -58,19 +71,27 @@ function drawGame() {
             ctx.fillText(state.message, canvas.width/5, canvas.height/3);
             return
         }
+        if(!start) {
+            start = true;
+            mapWidth = state.map[0].length
+            mapHeight = state.map.length
+        }
+        responsiveX = canvas.width/mapWidth
+        responsiveY = canvas.height/mapHeight
+        
         for (let i = 0; i < state.map.length; i++) {
             for (let j = 0; j < state.map[i].length; j++) {
                 // Draw blocks
-                ctx.drawImage(images["block" + state.map[i][j].health], i*64, j*64, 64, 64);
+                ctx.drawImage(images["block" + state.map[i][j].health], i*responsiveX, j*responsiveY, responsiveX, responsiveY);
             }
         }
         // Draw players
         for (let i = 0; i < state.playersArray.length; i++) {
             const player = state.playersArray[i];
             if (!player.death) {
-                ctx.drawImage(images.playerImg, player.position.x*64, player.position.y*64, 64, 64);
+                ctx.drawImage(images.playerImg, player.position.x*responsiveX, player.position.y*responsiveY, responsiveX, responsiveY);
             } else {
-                ctx.drawImage(images.playerDeath, player.position.x*64, player.position.y*64, 64, 64);
+                ctx.drawImage(images.playerDeath, player.position.x*responsiveX, player.position.y*responsiveY, responsiveX, responsiveY);
             }
         }
     }) // Return State
@@ -104,11 +125,9 @@ document.addEventListener('keydown',(ev) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <body>
-        <canvas id="canvas" style="border: 1px solid black" width="640" height="640"></canvas>
-    </body>
+    <link rel="stylesheet" type = "text/css" href="static/styles.css"/>
 </head>
 <body>
-    
+    <canvas id="canvas"></canvas>
 </body>
 </html>
